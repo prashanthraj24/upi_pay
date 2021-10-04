@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:upi_pay/upi_pay.dart';
 
@@ -62,7 +63,7 @@ class _ScreenState extends State<Screen> {
     });
   }
 
-  Future<void> _onTap(ApplicationMeta app) async {
+  Future<void> _onTap(ApplicationMeta app, BuildContext context) async {
     final err = _validateUpiAddress(_upiAddressController.text);
     if (err != null) {
       setState(() {
@@ -76,18 +77,35 @@ class _ScreenState extends State<Screen> {
 
     final transactionRef = Random.secure().nextInt(1 << 32).toString();
     print("Starting transaction with id $transactionRef");
-
-    final a = await UpiPay.initiateTransaction(
-      amount: _amountController.text,
-      app: app.upiApplication,
-      receiverName: 'Sharad',
-      receiverUpiAddress: _upiAddressController.text,
-      transactionRef: transactionRef,
-      transactionNote: 'UPI Payment',
-      // merchantCode: '7372',
-    );
-
-    print(a);
+    try {
+      final a = await UpiPay.initiateTransaction(
+        amount: _amountController.text,
+        app: app.upiApplication,
+        receiverName: 'Sharad',
+        receiverUpiAddress: _upiAddressController.text,
+        transactionRef: transactionRef,
+        transactionNote: 'UPI Payment',
+        // merchantCode: '7372',
+      );
+      print(a);
+      await showDialog(
+        context: context,
+        useRootNavigator: true,
+        builder: (_) => Container(
+          color: Colors.white,
+          child: Text(a.rawResponse!),
+        ),
+      );
+    } catch (e, s) {
+      await showDialog(
+        context: context,
+        useRootNavigator: true,
+        builder: (_) => Container(
+          color: Colors.white,
+          child: Text(e.toString() + '\n' + s.toString()),
+        ),
+      );
+    }
   }
 
   @override
@@ -99,8 +117,8 @@ class _ScreenState extends State<Screen> {
           _vpa(),
           if (_upiAddrError != null) _vpaError(),
           _amount(),
-          if (Platform.isIOS) _submitButton(),
-          Platform.isAndroid ? _androidApps() : _iosApps(),
+          if (Platform.isIOS) _submitButton(context),
+          Platform.isAndroid ? _androidApps(context) : _iosApps(context),
         ],
       ),
     );
@@ -178,20 +196,20 @@ class _ScreenState extends State<Screen> {
     );
   }
 
-  Widget _submitButton() {
+  Widget _submitButton(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 32),
       child: Row(
         children: <Widget>[
           Expanded(
             child: MaterialButton(
-              onPressed: () async => await _onTap(_apps![0]),
+              onPressed: () async => await _onTap(_apps![0], context),
               child: Text('Initiate Transaction',
                   style: Theme.of(context)
                       .textTheme
                       .button!
                       .copyWith(color: Colors.white)),
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).colorScheme.secondary,
               height: 48,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
@@ -202,7 +220,7 @@ class _ScreenState extends State<Screen> {
     );
   }
 
-  Widget _androidApps() {
+  Widget _androidApps(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 32, bottom: 32),
       child: Column(
@@ -215,13 +233,13 @@ class _ScreenState extends State<Screen> {
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
-          if (_apps != null) _appsGrid(_apps!.map((e) => e).toList()),
+          if (_apps != null) _appsGrid(_apps!.map((e) => e).toList(), context),
         ],
       ),
     );
   }
 
-  Widget _iosApps() {
+  Widget _iosApps(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 32, bottom: 32),
       child: Column(
@@ -242,7 +260,7 @@ class _ScreenState extends State<Screen> {
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
-          if (_apps != null) _discoverableAppsGrid(),
+          if (_apps != null) _discoverableAppsGrid(context),
           Container(
             margin: EdgeInsets.only(top: 12, bottom: 12),
             child: Text(
@@ -250,33 +268,33 @@ class _ScreenState extends State<Screen> {
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
-          if (_apps != null) _nonDiscoverableAppsGrid(),
+          if (_apps != null) _nonDiscoverableAppsGrid(context),
         ],
       ),
     );
   }
 
-  GridView _discoverableAppsGrid() {
+  GridView _discoverableAppsGrid(BuildContext context) {
     List<ApplicationMeta> metaList = [];
     _apps!.forEach((e) {
       if (e.upiApplication.discoveryCustomScheme != null) {
         metaList.add(e);
       }
     });
-    return _appsGrid(metaList);
+    return _appsGrid(metaList, context);
   }
 
-  GridView _nonDiscoverableAppsGrid() {
+  GridView _nonDiscoverableAppsGrid(BuildContext context) {
     List<ApplicationMeta> metaList = [];
     _apps!.forEach((e) {
       if (e.upiApplication.discoveryCustomScheme == null) {
         metaList.add(e);
       }
     });
-    return _appsGrid(metaList);
+    return _appsGrid(metaList, context);
   }
 
-  GridView _appsGrid(List<ApplicationMeta> apps) {
+  GridView _appsGrid(List<ApplicationMeta> apps, BuildContext context) {
     apps.sort((a, b) => a.upiApplication
         .getAppName()
         .toLowerCase()
@@ -294,7 +312,9 @@ class _ScreenState extends State<Screen> {
               key: ObjectKey(it.upiApplication),
               // color: Colors.grey[200],
               child: InkWell(
-                onTap: Platform.isAndroid ? () async => await _onTap(it) : null,
+                onTap: Platform.isAndroid
+                    ? () async => await _onTap(it, context)
+                    : null,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,

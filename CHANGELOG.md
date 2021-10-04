@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Fix for warning around Android embedding
+
 ## 1.0.1
 
 - Android API version 30 support

@@ -36,8 +36,10 @@ class AndroidTransactionHelper implements _PlatformTransactionHelperBase {
   @override
   Future<UpiTransactionResponse> transact(UpiMethodChannel upiMethodChannel,
       TransactionDetails transactionDetails) async {
+    print("Initiating transaction on Android");
     String? responseString =
         await upiMethodChannel.initiateTransaction(transactionDetails);
+    print("Response received $responseString");
     return UpiTransactionResponse.android(
         responseString == null ? "" : responseString);
   }

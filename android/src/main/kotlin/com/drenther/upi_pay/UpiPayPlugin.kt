@@ -124,8 +124,9 @@ class UpiPayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppCompatAc
         this.success("activity_unavailable")
         return
       }
-      getTransactionResult?.launch(intent)
-      // activity?.startActivityForResult(intent, requestCodeNumber)
+      Log.d("hmt", intent.toString())
+      //getTransactionResult?.launch(intent)
+      activity?.startActivityForResult(intent, requestCodeNumber)
     } catch (ex: Exception) {
       Log.e("upi_pay", ex.toString())
       Log.e("upi_pay", ex.stackTraceToString())

@@ -58,8 +58,8 @@ class UpiPay {
     required String receiverName,
     required String transactionRef,
     required String amount,
-    String? url,
-    String? transactionNote,
+    required String url,
+    required String transactionNote,
   }) async {
     final transactionDetails = TransactionDetails(
       upiApplication: app,
@@ -93,10 +93,8 @@ class UpiPay {
   /// [paymentType] must be [UpiApplicationDiscoveryAppPaymentType.nonMerchant]
   /// for now. Setting it to any other value will lead to [UnsupportedError].
   static Future<List<ApplicationMeta>> getInstalledUpiApplications({
-    UpiApplicationDiscoveryAppPaymentType paymentType:
-        UpiApplicationDiscoveryAppPaymentType.nonMerchant,
-    UpiApplicationDiscoveryAppStatusType statusType:
-        UpiApplicationDiscoveryAppStatusType.working,
+    UpiApplicationDiscoveryAppPaymentType paymentType: UpiApplicationDiscoveryAppPaymentType.nonMerchant,
+    UpiApplicationDiscoveryAppStatusType statusType: UpiApplicationDiscoveryAppStatusType.working,
   }) async {
     if (paymentType != UpiApplicationDiscoveryAppPaymentType.nonMerchant) {
       throw UnsupportedError('The parameter `paymentType` must be '
@@ -113,8 +111,7 @@ class UpiPay {
     );
   }
 
-  static final Map<UpiApplication, UpiApplicationStatus>
-      _upiApplicationStatuses = {
+  static final Map<UpiApplication, UpiApplicationStatus> _upiApplicationStatuses = {
     UpiApplication.googlePay: UpiApplicationStatus.googlePay,
     UpiApplication.phonePe: UpiApplicationStatus.phonePe,
     UpiApplication.paytm: UpiApplicationStatus.paytm,
@@ -139,8 +136,7 @@ class UpiPay {
     UpiApplication.bhimDcbUpi: UpiApplicationStatus.bhimDcbUpi,
     UpiApplication.bhimDlbUpi: UpiApplicationStatus.bhimDlbUpi,
     UpiApplication.bhimEquitasUpi: UpiApplicationStatus.bhimEquitasUpi,
-    UpiApplication.bhimIdfcFirstBankUpi:
-        UpiApplicationStatus.bhimIdfcFirstBankUpi,
+    UpiApplication.bhimIdfcFirstBankUpi: UpiApplicationStatus.bhimIdfcFirstBankUpi,
     UpiApplication.bhimIndianBankUpi: UpiApplicationStatus.bhimIndianBankUpi,
     UpiApplication.bhimIndusPayUpi: UpiApplicationStatus.bhimIndusPayUpi,
     UpiApplication.bhimIobUpi: UpiApplicationStatus.bhimIobUpi,

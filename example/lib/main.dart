@@ -82,6 +82,7 @@ class _ScreenState extends State<Screen> {
         receiverUpiAddress: _upiAddressController.text,
         transactionRef: transactionRef,
         transactionNote: 'UPI Payment',
+        url: '',
         // merchantCode: '7372',
       );
       print(a);
@@ -202,10 +203,7 @@ class _ScreenState extends State<Screen> {
             child: MaterialButton(
               onPressed: () async => await _onTap(_apps![0], context),
               child: Text('Initiate Transaction',
-                  style: Theme.of(context)
-                      .textTheme
-                      .button!
-                      .copyWith(color: Colors.white)),
+                  style: Theme.of(context).textTheme.button!.copyWith(color: Colors.white)),
               color: Theme.of(context).colorScheme.secondary,
               height: 48,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
@@ -291,10 +289,8 @@ class _ScreenState extends State<Screen> {
   }
 
   GridView _appsGrid(List<ApplicationMeta> apps, BuildContext context) {
-    apps.sort((a, b) => a.upiApplication
-        .getAppName()
-        .toLowerCase()
-        .compareTo(b.upiApplication.getAppName().toLowerCase()));
+    apps.sort(
+        (a, b) => a.upiApplication.getAppName().toLowerCase().compareTo(b.upiApplication.getAppName().toLowerCase()));
     return GridView.count(
       crossAxisCount: 4,
       shrinkWrap: true,
@@ -308,9 +304,7 @@ class _ScreenState extends State<Screen> {
               key: ObjectKey(it.upiApplication),
               // color: Colors.grey[200],
               child: InkWell(
-                onTap: Platform.isAndroid
-                    ? () async => await _onTap(it, context)
-                    : null,
+                onTap: Platform.isAndroid ? () async => await _onTap(it, context) : null,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,

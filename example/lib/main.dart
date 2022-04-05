@@ -38,12 +38,10 @@ class _ScreenState extends State<Screen> {
   void initState() {
     super.initState();
 
-    _amountController.text =
-        (Random.secure().nextDouble() * 10).toStringAsFixed(2);
+    _amountController.text = (Random.secure().nextDouble() * 10).toStringAsFixed(2);
 
     Future.delayed(Duration(milliseconds: 0), () async {
-      _apps = await UpiPay.getInstalledUpiApplications(
-          statusType: UpiApplicationDiscoveryAppStatusType.all);
+      _apps = await UpiPay.getInstalledUpiApplications(statusType: UpiApplicationDiscoveryAppStatusType.all);
       setState(() {});
     });
   }
@@ -57,8 +55,7 @@ class _ScreenState extends State<Screen> {
 
   void _generateAmount() {
     setState(() {
-      _amountController.text =
-          (Random.secure().nextDouble() * 10).toStringAsFixed(2);
+      _amountController.text = (Random.secure().nextDouble() * 10).toStringAsFixed(2);
     });
   }
 
@@ -84,6 +81,7 @@ class _ScreenState extends State<Screen> {
       receiverUpiAddress: _upiAddressController.text,
       transactionRef: transactionRef,
       transactionNote: 'UPI Payment',
+      url: '',
       // merchantCode: '7372',
     );
 
@@ -187,14 +185,10 @@ class _ScreenState extends State<Screen> {
             child: MaterialButton(
               onPressed: () async => await _onTap(_apps![0]),
               child: Text('Initiate Transaction',
-                  style: Theme.of(context)
-                      .textTheme
-                      .button!
-                      .copyWith(color: Colors.white)),
+                  style: Theme.of(context).textTheme.button!.copyWith(color: Colors.white)),
               color: Theme.of(context).accentColor,
               height: 48,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
             ),
           ),
         ],
@@ -277,10 +271,8 @@ class _ScreenState extends State<Screen> {
   }
 
   GridView _appsGrid(List<ApplicationMeta> apps) {
-    apps.sort((a, b) => a.upiApplication
-        .getAppName()
-        .toLowerCase()
-        .compareTo(b.upiApplication.getAppName().toLowerCase()));
+    apps.sort(
+        (a, b) => a.upiApplication.getAppName().toLowerCase().compareTo(b.upiApplication.getAppName().toLowerCase()));
     return GridView.count(
       crossAxisCount: 4,
       shrinkWrap: true,

@@ -10,6 +10,6 @@
 
 @implementation UpiPayPlugin
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  [SwiftUpiPayPlugin registerWithRegistrar:registrar];
+  [ registerWithRegistrar:registrar];
 }
 @end

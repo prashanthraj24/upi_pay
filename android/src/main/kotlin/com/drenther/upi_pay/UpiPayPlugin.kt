@@ -24,6 +24,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 // import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 import java.io.ByteArrayOutputStream
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 
 /** UpiPayPlugin */
 class UpiPayPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, AppCompatActivity() {

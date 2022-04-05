@@ -39,12 +39,10 @@ class _ScreenState extends State<Screen> {
   void initState() {
     super.initState();
 
-    _amountController.text =
-        (Random.secure().nextDouble() * 10).toStringAsFixed(2);
+    _amountController.text = (Random.secure().nextDouble() * 10).toStringAsFixed(2);
 
     Future.delayed(Duration(milliseconds: 0), () async {
-      _apps = await UpiPay.getInstalledUpiApplications(
-          statusType: UpiApplicationDiscoveryAppStatusType.all);
+      _apps = await UpiPay.getInstalledUpiApplications(statusType: UpiApplicationDiscoveryAppStatusType.all);
       setState(() {});
     });
   }
@@ -58,8 +56,7 @@ class _ScreenState extends State<Screen> {
 
   void _generateAmount() {
     setState(() {
-      _amountController.text =
-          (Random.secure().nextDouble() * 10).toStringAsFixed(2);
+      _amountController.text = (Random.secure().nextDouble() * 10).toStringAsFixed(2);
     });
   }
 
@@ -211,8 +208,7 @@ class _ScreenState extends State<Screen> {
                       .copyWith(color: Colors.white)),
               color: Theme.of(context).colorScheme.secondary,
               height: 48,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
             ),
           ),
         ],
